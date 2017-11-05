@@ -73,7 +73,26 @@ var highlight = function(startTime, length){
 	console.log('left ' + left);
 	console.log('width ' + width);
 	$('.ytp-progress-list').append('<div class="ytp-play-progress testclass ytp-swatch-background-color" style="left:' + left +'px; width: '+width+'px; background-color: blue;"></div>');
+	$('.ytp-chrome-bottom').prepend('<button data-startTime = "'+startTime+'" data-endtime = "'+length+'" id="button' + buttonid +'" class="underclass ytp-play-progress ytp-swatch-background-color " style="left:' + left +'px; width: '+width+'px; background-color: blue; height: 10px; border: none;"></button>');
+	function handler(testid) {
+		var sT = parseInt(document.getElementById(testid).getAttribute('data-starttime'));
+			var eT = parseInt(document.getElementById(testid).getAttribute('data-starttime')) + parseInt(document.getElementById(testid).getAttribute('data-endtime'));
+			gun.get(key).set({start:sT, end:eT});
+			console.log(testid + " " + sT + " " + eT);
+		$("#"+testid).remove();
+		/* ... */
+		console.log("IT WORKS");
+	}
 
+	$(document).ready(function() {
+		$(".underclass").click(function(){
+
+			var id = this.id;
+			console.log(id);
+			handler(id);
+
+		});
+	});
 	buttonid++;
 };
 
@@ -82,9 +101,11 @@ video.addEventListener("seeking", function() {
     console.log([currtime,video.currentTime]);
     if(isScrub){
       if(currtime < video.currentTime){
-          gun.get(key).path(guid()).put({start:currtime, end:video.currentTime});
+         // gun.get(key).set({start:currtime, end:video.currentTime});
+         highlight(currtime,video.currentTime-currtime);
       }
     }else{isScrub=true;}
+    
     
 }, true);
 
