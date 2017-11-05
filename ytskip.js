@@ -1,7 +1,7 @@
 
 var timesToSkip = [];
 var gun = new Gun('https://gunjs.herokuapp.com/gun');
-
+var isScrub = true;
 
 console.log(video);
 
@@ -41,6 +41,7 @@ video.ontimeupdate = function() {
     timesToSkip.forEach(function(time){
         var cTime = video.currentTime;            
         if(cTime > time[0] && cTime < time[1]){
+            isScrub = false;
             video.currentTime = time[1];
         }
     }); 
@@ -85,11 +86,12 @@ function handler(testid) {
 
 video.addEventListener("seeking", function() { 
     console.log([currtime,video.currentTime]);
-
-    if(currtime < video.currentTime){
-   
-        gun.get(key).set({start:currtime, end:video.currentTime});
-    }
+    if(isScrub){
+      if(currtime < video.currentTime){
+          gun.get(key).set({start:currtime, end:video.currentTime});
+      }
+    }else{isScrub=true;}
+    
     
 }, true);
 
