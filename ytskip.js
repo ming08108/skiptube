@@ -6,7 +6,6 @@ var video = $(".html5-main-video").first()[0];
 console.log(video);
 video.addEventListener('loadeddata', function() {
     console.log("Loaded the video's data!");
-    
 }, false);
 
 var key = String(location.href.match("v=[^&]+"));
