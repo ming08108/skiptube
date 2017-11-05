@@ -1,6 +1,6 @@
 
 var timesToSkip = [[0,10], [30,40], [60,65]];
-var gun = new Gun();
+var gun = new Gun('https://gunjs.herokuapp.com/gun');
 newTimes = [{start:0,end:10},{start:30,end:40},{start:60,end:65}]
 
 
