@@ -10,11 +10,10 @@ function guid() {
 
 
 var timesToSkip = [];
-var gun = new Gun();
+var gun = new Gun("https://gunjs.herokuapp.com/gun");
 var isScrub = true;
 
 console.log(video);
-
 
 var video = $(".html5-main-video").first()[0];
 
@@ -32,6 +31,7 @@ function init(){
     timesToSkip = [];
 
     gunUpdate = gun.get(key).map().val(function(item, k){ // print them back out
+
         console.log("item", item);
         timesToSkip.push([item.start, item.end]);
         highlight(item.start, item.end-item.start);
@@ -56,7 +56,6 @@ video.ontimeupdate = function() {
         }
     }); 
 };
-
 
 
 
@@ -113,15 +112,16 @@ video.addEventListener("seeking", function() {
 
 setTimeout(()=>{$(".title").before($("<table id='skipTable'></table>"));
                 gun.get(key).map().val(function(item, k){ // print them back out
-                    $("#skipTable").append($(`<tr>
+                    $("#skipTable").append($(`<tr id="` + k + `">
                         <th>` + item.start.toString() + `</th>
                         <th>` + item.end.toString() + `</th>
                         <th><button class="delete" id="` + k + `">Delete</button></th>
                     </tr>`));
-                    $("#" + k).click(function(){
+                    $("button#" + k).click(function(){
                         console.log(this.id);
                         gun.get(key).path(this.id).put(null);
+                        $("tr#" + k).remove();
+                        init();
                     });
-                });
-                
+                });   
 }, 2000);
