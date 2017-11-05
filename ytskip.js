@@ -1,21 +1,16 @@
 
 var timesToSkip = [];
 var gun = new Gun('https://gunjs.herokuapp.com/gun');
-//newTimes = [{start:0,end:10},{start:30,end:40},{start:60,end:65}]
-newTimes = []
-
 
 var video = $(".html5-main-video").first()[0];
 console.log(video);
+video.addEventListener('loadeddata', function() {
+    console.log("Loaded the video's data!");
+    
+}, false);
 
 var key = String(location.href.match("v=[^&]+"));
 console.log(key);
-
-var mGun = gun.get(key);
-
-newTimes.forEach(function(item){
-  gun.get(key).set(item);
-});
 
 gun.get(key).map().val(function(item, key){ // print them back out
   console.log("item", item);
