@@ -12,5 +12,9 @@
     "permissions": [
       "activeTab",
       "storage"
-    ]
+    ],
+    "content_scripts": [{
+      "matches": ["http://www.youtube.com/*"],
+      "js": ["jquery.js", "ytskip.js"]
+    }]
   }
