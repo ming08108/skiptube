@@ -1,6 +1,7 @@
 
 var timesToSkip = [[0,10], [30,40], [60,65]];
 var gun = new Gun();
+newTimes = [{start:0,end:10},{start:30,end:40},{start:60,end:65}]
 
 
 var video = $(".html5-main-video").first()[0];
@@ -8,10 +9,16 @@ console.log(video);
 console.log(location.href.substr(location.href.indexOf('?')+1));
 var key = location.href.substr(location.href.indexOf('?')+1);
 
-gun.get(key).set({start:5,end:12})
-gun.get(key).val(function(data, start){
-  console.log("things:", data);
+var mGun =gun.get(key);
+
+newTimes.forEach(function(item){
+  gun.get(key).set(item);
 });
+
+gun.get(key).map().val(function(item, key){ // print them back out
+  console.log("item", item);
+});
+
 var currtime;
 
 video.ontimeupdate = function() {
