@@ -1,12 +1,21 @@
 
 var timesToSkip = [[0,10], [30,40], [60,65]];
+var gun = new Gun();
 
 
 var video = $(".html5-main-video").first()[0];
 console.log(video);
+console.log(location.href.substr(location.href.indexOf('?')+1));
+var key = location.href.substr(location.href.indexOf('?')+1);
+
+gun.get(key).set({start:5,end:12})
+gun.get(key).val(function(data, start){
+  console.log("things:", data);
+});
+var currtime;
 
 video.ontimeupdate = function() {
-
+    currtime = video.currentTime
     timesToSkip.forEach(function(time){
         var cTime = video.currentTime;            
         if(cTime > time[0] && cTime < time[1]){
@@ -33,9 +42,8 @@ var highlight = function(startTime, length){
 };
 
 
-video.addEventListener("seeking", function() { xhttp.open("GET", "demoserver/timeend?t="+video.currentTime+location.href.substr(str.indexOf('?')+1,location.href.substr(str.indexOf('&'))), true); console.log(video.currentTime+location.href.substr(str.indexOf('?')+1,location.href.substr(str.indexOf('&')))) }, true);
+video.addEventListener("seeking", function() { /*xhttp.open("GET", "demoserver/timeend?t="+video.currentTime+location.href.substr(str.indexOf('?')+1,location.href.substr(str.indexOf('&'))), true);*/ gun.get;timesToSkip.push([currtime,video.currentTime]) }, true);
 
-video.addEventListener("seeked", function() { xhttp.open("GET", "demoserver/timeend?t="+video.currentTime+location.href.substr(str.indexOf('?')+1,location.href.substr(str.indexOf('&'))), true); console.log(video.currentTime+location.href.substr(str.indexOf('?')+1,location.href.substr(str.indexOf('&')))) }, true);
 
 timesToSkip.forEach((time) => {
     highlight(time[0], time[1]-time[0]);
