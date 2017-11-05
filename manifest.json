@@ -14,6 +14,6 @@
     ],
     "content_scripts": [{
       "matches": ["https://www.youtube.com/*"],
-      "js": ["gun.js","jquery.js", "ytskip.js"]
+      "js": ["gun.js","path.js","jquery.js", "ytskip.js"]
     }]
   }

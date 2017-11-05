@@ -1,6 +1,16 @@
+function guid() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+}
+
 
 var timesToSkip = [];
-var gun = new Gun('https://gunjs.herokuapp.com/gun');
+var gun = new Gun();
 var isScrub = true;
 
 console.log(video);
@@ -63,23 +73,7 @@ var highlight = function(startTime, length){
 	console.log('left ' + left);
 	console.log('width ' + width);
 	$('.ytp-progress-list').append('<div class="ytp-play-progress testclass ytp-swatch-background-color" style="left:' + left +'px; width: '+width+'px; background-color: blue;"></div>');
-	$('.ytp-chrome-bottom').prepend('<button id="button' + buttonid +'" class="underclass ytp-play-progress ytp-swatch-background-color " style="left:' + left +'px; width: '+width+'px; background-color: blue; height: 10px; border: none;"></button>');
-function handler(testid) {
 
-		$("#"+testid).remove();
-		/* ... */
-		console.log("IT WORKS");
-	}
-
-	$(document).ready(function() {
-		$(".underclass").click(function(){
-
-			var id = this.id;
-			console.log(id);
-			handler(id);
-
-		});
-	});
 	buttonid++;
 };
 
@@ -88,12 +82,25 @@ video.addEventListener("seeking", function() {
     console.log([currtime,video.currentTime]);
     if(isScrub){
       if(currtime < video.currentTime){
-          gun.get(key).set({start:currtime, end:video.currentTime});
+          gun.get(key).path(guid()).put({start:currtime, end:video.currentTime});
       }
     }else{isScrub=true;}
-    
     
 }, true);
 
 
 
+setTimeout(()=>{$(".title").before($("<table id='skipTable'></table>"));
+                gun.get(key).map().val(function(item, k){ // print them back out
+                    $("#skipTable").append($(`<tr>
+                        <th>` + item.start.toString() + `</th>
+                        <th>` + item.end.toString() + `</th>
+                        <th><button class="delete" id="` + k + `">Delete</button></th>
+                    </tr>`));
+                    $("#" + k).click(function(){
+                        console.log(this.id);
+                        gun.get(key).path(this.id).put(null);
+                    });
+                });
+                
+}, 2000);
