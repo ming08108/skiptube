@@ -35,6 +35,7 @@ var pixelLength = $('.ytp-progress-list').width();
 
 var timeinseconds = $('.html5-main-video')[0].duration;
 console.log('time in seconds ' + timeinseconds);
+var buttonid = 1;
 var highlight = function(startTime, length){
 	var skipPercent = length/timeinseconds;
 
@@ -45,22 +46,32 @@ var highlight = function(startTime, length){
 	console.log('left ' + left);
 	console.log('width ' + width);
 	$('.ytp-progress-list').append('<div class="ytp-play-progress testclass ytp-swatch-background-color" style="left:' + left +'px; width: '+width+'px; background-color: blue;"></div>');
-	$('div#player.style-scope.ytd-watch').prepend('<button class="underclass ytp-play-progress ytp-swatch-background-color " style="left:' + left +'px; width: '+width+'px; background-color: blue; height: 10px"></button>');
-function handler() {
+	$('div#player.style-scope.ytd-watch').prepend('<button id="button' + buttonid +'" class="underclass ytp-play-progress ytp-swatch-background-color " style="left:' + left +'px; width: '+width+'px; background-color: blue; height: 10px"></button>');
+function handler(testid) {
+
+		$("#"+testid).remove();
 		/* ... */
 		console.log("IT WORKS");
 	}
 
 	$(document).ready(function() {
-		$(".underclass").click(handler);
+		$(".underclass").click(function(){
+
+			var id = this.id;
+			console.log(id);
+			handler(id);
+
+		});
 	});
+	buttonid++;
 };
+
 
 video.addEventListener("seeking", function() { 
     console.log([currtime,video.currentTime]);
 
     if(currtime < video.currentTime){
-        highlight(currtime,video.currentTime-currtime);
+   
         gun.get(key).set({start:currtime, end:video.currentTime});
     }
     
