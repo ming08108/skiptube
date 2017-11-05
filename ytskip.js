@@ -62,7 +62,7 @@ var highlight = function(startTime, length){
 	console.log('left ' + left);
 	console.log('width ' + width);
 	$('.ytp-progress-list').append('<div class="ytp-play-progress testclass ytp-swatch-background-color" style="left:' + left +'px; width: '+width+'px; background-color: blue;"></div>');
-	$('div#player.style-scope.ytd-watch').prepend('<button id="button' + buttonid +'" class="underclass ytp-play-progress ytp-swatch-background-color " style="left:' + left +'px; width: '+width+'px; background-color: blue; height: 10px; border: none;"></button>');
+	$('.ytp-chrome-bottom').prepend('<button id="button' + buttonid +'" class="underclass ytp-play-progress ytp-swatch-background-color " style="left:' + left +'px; width: '+width+'px; background-color: blue; height: 10px; border: none;"></button>');
 function handler(testid) {
 
 		$("#"+testid).remove();
