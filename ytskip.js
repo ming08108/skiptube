@@ -1,7 +1,8 @@
 
 var timesToSkip = [];
 var gun = new Gun('https://gunjs.herokuapp.com/gun');
-newTimes = [{start:0,end:10},{start:30,end:40},{start:60,end:65}]
+//newTimes = [{start:0,end:10},{start:30,end:40},{start:60,end:65}]
+newTimes = []
 
 
 var video = $(".html5-main-video").first()[0];
@@ -52,7 +53,7 @@ var highlight = function(startTime, length){
 };
 
 
-video.addEventListener("seeking", function() { /*xhttp.open("GET", "demoserver/timeend?t="+video.currentTime+location.href.substr(str.indexOf('?')+1,location.href.substr(str.indexOf('&'))), true);*/ gun.get;timesToSkip.push([currtime,video.currentTime]) }, true);
+video.addEventListener("seeking", function() { /*xhttp.open("GET", "demoserver/timeend?t="+video.currentTime+location.href.substr(str.indexOf('?')+1,location.href.substr(str.indexOf('&'))), true);*/ console.log([currtime,video.currentTime]) }, true);
 
 
 
