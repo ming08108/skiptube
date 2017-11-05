@@ -19,6 +19,7 @@ var video = $(".html5-main-video").first()[0];
 
 
 function init(){
+    $("#skipTable").remove();
     $(".title").before($("<table id='skipTable'></table>"));
     
     $(".testclass").remove();
