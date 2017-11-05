@@ -2,21 +2,37 @@
 var timesToSkip = [];
 var gun = new Gun('https://gunjs.herokuapp.com/gun');
 
-var video = $(".html5-main-video").first()[0];
+
 console.log(video);
-video.addEventListener('loadeddata', function() {
+
+
+var video = $(".html5-main-video").first()[0];
+
+
+function init(){
+    $(".testclass").remove();
+    $(".underclass").remove();
+    timeinseconds = $('.html5-main-video')[0].duration;
+    pixelLength = $('.ytp-progress-list').width();
+    video = $(".html5-main-video").first()[0];
     console.log("Loaded the video's data!");
-}, false);
+    key = String(location.href.match("v=[^&]+"));
+    if (typeof gunUpdate != 'undefined')
+    	gunUpdate.off();
+    timesToSkip = [];
 
-var key = String(location.href.match("v=[^&]+"));
-console.log(key);
+    gunUpdate = gun.get(key).map().val(function(item, key){ // print them back out
+        console.log("item", item);
+        timesToSkip.push([item.start, item.end]);
+        highlight(item.start, item.end-item.start);
+    });
 
-gun.get(key).map().val(function(item, key){ // print them back out
-  console.log("item", item);
-  timesToSkip.push([item.start, item.end]);
-  highlight(item.start, item.end-item.start);
+}
 
-});
+init();
+video.addEventListener('loadeddata', init, false);
+
+
 
 var currtime;
 
@@ -31,9 +47,9 @@ video.ontimeupdate = function() {
 };
 
 
-var pixelLength = $('.ytp-progress-list').width();
 
-var timeinseconds = $('.html5-main-video')[0].duration;
+
+
 console.log('time in seconds ' + timeinseconds);
 var highlight = function(startTime, length){
 	var skipPercent = length/timeinseconds;
