@@ -36,8 +36,10 @@ function init(){
     gunUpdate = gun.get(key).map().val(function(item, k){ // print them back out
         if(item == null){
             $("#"+k).remove();
+            console.log('asdf3')
         }
         else{
+            console.log('asdf2')
             console.log("item", item);
             timesToSkip.push([item.start, item.end]);
             highlight_bar(item.start, item.end-item.start,k);
@@ -51,6 +53,7 @@ function init(){
                 console.log(this.id);
                 gun.get(key).path(this.id).put(null);
                 $("tr#" + k).remove();
+                init();
             });
         }
     });
@@ -58,6 +61,7 @@ function init(){
 }
 
 init();
+setTimeout(init,1000);
 video.addEventListener('loadeddata', init, false);
 
 
