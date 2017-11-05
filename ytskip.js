@@ -53,7 +53,15 @@ var highlight = function(startTime, length){
 };
 
 
-video.addEventListener("seeking", function() { /*xhttp.open("GET", "demoserver/timeend?t="+video.currentTime+location.href.substr(str.indexOf('?')+1,location.href.substr(str.indexOf('&'))), true);*/ console.log([currtime,video.currentTime]) }, true);
+video.addEventListener("seeking", function() { 
+    console.log([currtime,video.currentTime]);
+
+    if(currtime < video.currentTime){
+        highlight(currtime,video.currentTime-currtime);
+        gun.get(key).set({start:currtime, end:video.currentTime});
+    }
+    
+}, true);
 
 
 
