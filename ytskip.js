@@ -32,6 +32,9 @@ var highlight = function(startTime, length){
 	$('.ytp-progress-list').append('<div class="ytp-play-progress testclass ytp-swatch-background-color" style="left:' + left +'px; width: '+width+'px; background-color: blue;"></div>');
 };
 
+video.addEventListener("seeking", function() { xhttp.open("GET", "demoserver/timestart?t="+video.currentTime, true); }, true);
+
+video.addEventListener("seeked", function() { xhttp.open("GET", "demoserver/timeend?t="+video.currentTime, true); }, true);
 
 timesToSkip.forEach((time) => {
     highlight(time[0], time[1]-time[0]);
