@@ -31,7 +31,7 @@ function init(){
     	gunUpdate.off();
     timesToSkip = [];
 
-    gunUpdate = gun.get(key).map().val(function(item, key){ // print them back out
+    gunUpdate = gun.get(key).map().val(function(item, k){ // print them back out
         console.log("item", item);
         timesToSkip.push([item.start, item.end]);
         highlight(item.start, item.end-item.start);
