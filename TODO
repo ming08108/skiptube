@@ -1,1 +1,5 @@
 figure out how CSS works
+
+relevant selectors
+$('.ytp-progress-list').offsetWidth
+$('.html5-main-video').duration
