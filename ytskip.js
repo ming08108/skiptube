@@ -19,6 +19,8 @@ var video = $(".html5-main-video").first()[0];
 
 
 function init(){
+    $(".title").before($("<table id='skipTable'></table>"));
+    
     $(".testclass").remove();
     $(".underclass").remove();
     timeinseconds = $('.html5-main-video')[0].duration;
@@ -31,10 +33,25 @@ function init(){
     timesToSkip = [];
 
     gunUpdate = gun.get(key).map().val(function(item, k){ // print them back out
+        if(item == null){
+            $("#"+k).remove();
+        }
+        else{
+            console.log("item", item);
+            timesToSkip.push([item.start, item.end]);
+            highlight_bar(item.start, item.end-item.start,k);
 
-        console.log("item", item);
-        timesToSkip.push([item.start, item.end]);
-        highlight(item.start, item.end-item.start);
+            $("#skipTable").append($(`<tr id="` + k + `">
+                <th>` + item.start.toString() + `</th>
+                <th>` + item.end.toString() + `</th>
+                <th><button class="delete" id="` + k + `">Delete</button></th>
+            </tr>`));
+            $("button#" + k).click(function(){
+                console.log(this.id);
+                gun.get(key).path(this.id).put(null);
+                $("tr#" + k).remove();
+            });
+        }
     });
 
 }
@@ -57,6 +74,13 @@ video.ontimeupdate = function() {
     }); 
 };
 
+var highlight_bar = function(startTime, length, id){
+    var skipPercent = length/timeinseconds;
+    var startPercent = startTime/timeinseconds;
+    var left = startPercent*pixelLength;
+    var width = skipPercent*pixelLength;
+    $('.ytp-progress-list').append('<div id ="' + id + '"' + 'class="ytp-play-progress testclass ytp-swatch-background-color" style="left:' + left +'px; width: '+width+'px; background-color: blue;"></div>');    
+}
 
 
 
@@ -71,25 +95,24 @@ var highlight = function(startTime, length){
 	var width = skipPercent*pixelLength;
 	console.log('left ' + left);
 	console.log('width ' + width);
-	$('.ytp-progress-list').append('<div class="ytp-play-progress testclass ytp-swatch-background-color" style="left:' + left +'px; width: '+width+'px; background-color: blue;"></div>');
 	$('.ytp-chrome-bottom').prepend('<button data-startTime = "'+startTime+'" data-endtime = "'+length+'" id="button' + buttonid +'" class="underclass ytp-play-progress ytp-swatch-background-color " style="left:' + left +'px; width: '+width+'px; background-color: blue; height: 10px; border: none;"></button>');
 	function handler(testid) {
 		var sT = parseInt(document.getElementById(testid).getAttribute('data-starttime'));
-			var eT = parseInt(document.getElementById(testid).getAttribute('data-starttime')) + parseInt(document.getElementById(testid).getAttribute('data-endtime'));
-			gun.get(key).set({start:sT, end:eT});
-			console.log(testid + " " + sT + " " + eT);
-		$("#"+testid).remove();
+        var eT = parseInt(document.getElementById(testid).getAttribute('data-starttime')) + parseInt(document.getElementById(testid).getAttribute('data-endtime'));
+        
+        gun.get(key).set({start:sT, end:eT});
+        console.log(testid + " " + sT + " " + eT);
+            
+        $("#"+testid).remove();
 		/* ... */
 		console.log("IT WORKS");
 	}
 
 	$(document).ready(function() {
 		$(".underclass").click(function(){
-
 			var id = this.id;
 			console.log(id);
 			handler(id);
-
 		});
 	});
 	buttonid++;
@@ -105,23 +128,6 @@ video.addEventListener("seeking", function() {
       }
     }else{isScrub=true;}
     
-    
 }, true);
 
 
-
-setTimeout(()=>{$(".title").before($("<table id='skipTable'></table>"));
-                gun.get(key).map().val(function(item, k){ // print them back out
-                    $("#skipTable").append($(`<tr id="` + k + `">
-                        <th>` + item.start.toString() + `</th>
-                        <th>` + item.end.toString() + `</th>
-                        <th><button class="delete" id="` + k + `">Delete</button></th>
-                    </tr>`));
-                    $("button#" + k).click(function(){
-                        console.log(this.id);
-                        gun.get(key).path(this.id).put(null);
-                        $("tr#" + k).remove();
-                        init();
-                    });
-                });   
-}, 2000);
