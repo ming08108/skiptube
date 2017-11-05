@@ -51,8 +51,16 @@ var highlight = function(startTime, length){
 	console.log('left ' + left);
 	console.log('width ' + width);
 	$('.ytp-progress-list').append('<div class="ytp-play-progress testclass ytp-swatch-background-color" style="left:' + left +'px; width: '+width+'px; background-color: blue;"></div>');
-};
+	$('div#player.style-scope.ytd-watch').prepend('<button class="underclass ytp-play-progress ytp-swatch-background-color " style="left:' + left +'px; width: '+width+'px; background-color: blue; height: 10px"></button>');
+function handler() {
+		/* ... */
+		console.log("IT WORKS");
+	}
 
+	$(document).ready(function() {
+		$(".underclass").click(handler);
+	});
+};
 
 video.addEventListener("seeking", function() { 
     console.log([currtime,video.currentTime]);
