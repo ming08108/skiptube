@@ -7,8 +7,9 @@ newTimes = []
 
 var video = $(".html5-main-video").first()[0];
 console.log(video);
-console.log(location.href.substr(location.href.indexOf('?')+1));
-var key = location.href.substr(location.href.indexOf('?')+1);
+
+var key = location.href.match('\\?v=[A-Za-z0-9]+');
+console.log(key);
 
 var mGun = gun.get(key);
 
