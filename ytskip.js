@@ -53,7 +53,13 @@ var highlight = function(startTime, length){
 };
 
 
-video.addEventListener("seeking", function() { /*xhttp.open("GET", "demoserver/timeend?t="+video.currentTime+location.href.substr(str.indexOf('?')+1,location.href.substr(str.indexOf('&'))), true);*/ console.log([currtime,video.currentTime]) }, true);
+video.addEventListener("seeking", function() { /*xhttp.open("GET", "demoserver/timeend?t="+video.currentTime+location.href.substr(str.indexOf('?')+1,location.href.substr(str.indexOf('&'))), true);*/
+	console.log([currtime,video.currentTime]) 
+	if(video.currentTime > currtime){
+		highlight(currtime, video.currentTime-currtime);
+	}
+
+}, true);
 
 
 
