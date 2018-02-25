@@ -34,11 +34,11 @@ var highlight_bar = function(startTime, length, id){
 
 var makeAds = function(skiplist){
     
-    skiplist.forEach(function(time){
-        skipAd(time, highlightid);
-        highlight_bar(time[0], time[1]-time[0], highlightid);
+    for(var time in skiplist){
+        skipAd(skiplist[time], highlightid);
+        highlight_bar(skiplist[time][0], skiplist[time][1]-skiplist[time][0], highlightid);
         highlightid = highlightid + 1;
-    })
+    }
 }
 
 video.ontimeupdate = function() {
@@ -89,19 +89,28 @@ var HttpClient = function() {
     }
 }
 
-$( document ).ready(function() {
-    console.log( "ready!" );
-    var vid = String(location.href.match("v=[^&]+")).substring(2);
-    
 
-    console.log(vid)
-    var client = new HttpClient();
-    client.get('https://hackillinois.freemerman.com/?id='+vid, function(response) {
-        timesToSkip = response
+
+
+function init(){
+
+    $(".buttonwrapper").remove()
+    $(".testclass").remove()
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        var vid = String(location.href.match("v=[^&]+")).substring(2);
         
-        console.log(JSON.parse(timesToSkip));
-        makeAds(JSON.parse(timesToSkip));
-        // do something with response
-    });
     
-});
+        console.log(vid)
+        var client = new HttpClient();
+        client.get('https://hackillinois.freemerman.com/?id='+vid, function(response) {
+            timesToSkip = response
+            console.log(timesToSkip);
+            makeAds(JSON.parse(timesToSkip));
+            // do something with response
+        });
+        
+    });
+}
+init();
+video.addEventListener('loadeddata', init, false);
