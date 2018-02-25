@@ -97,8 +97,15 @@ function init(){
     $(".buttonwrapper").remove()
     $(".testclass").remove()
     $( document ).ready(function() {
+        video = $(".html5-main-video").first()[0];
+        timeinseconds = $('.html5-main-video')[0].duration;
+        pixelLength = $('.ytp-progress-list').width();
+        timesToSkip;
+        buttonid = 1;
+        highlightid = 1;
+        currtime;
         console.log( "ready!" );
-        var vid = String(location.href.match("v=[^&]+")).substring(2);
+        vid = String(location.href.match("v=[^&]+")).substring(2);
         
     
         console.log(vid)
