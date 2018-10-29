@@ -27,22 +27,22 @@ function init(){
     timeinseconds = $('.html5-main-video')[0].duration;
     pixelLength = $('.ytp-progress-list').width();
     video = $(".html5-main-video").first()[0];
-    console.log("Loaded the video's data!");
     key = String(location.href.match("v=[^&]+"));
     if (typeof gunUpdate != 'undefined')
     	gunUpdate.off();
     timesToSkip = [];
+    var itemId = 0;
 
     gunUpdate = gun.get(key).map().val(function(item, k){ // print them back out
         if(item == null){
             $("#"+k).remove();
-            console.log('asdf3')
         }
         else{
-            console.log('asdf2')
-            console.log("item", item);
             timesToSkip.push([item.start, item.end]);
             highlight_bar(item.start, item.end-item.start,k);
+            time = [item.start, item.end];
+            skipAd(time, itemId);
+            itemId += 1;
 
             $("#skipTable").append($(`<tr id="` + k + `">
                 <th>` + item.start.toString() + `</th>
@@ -69,14 +69,18 @@ video.addEventListener('loadeddata', init, false);
 var currtime;
 
 video.ontimeupdate = function() {
-    currtime = video.currentTime
-    timesToSkip.forEach(function(time){
-        var cTime = video.currentTime;            
-        if(cTime > time[0] && cTime < time[1]){
-            isScrub = false;
-            video.currentTime = time[1];
+    currtime = video.currentTime;
+    $(".buttonwrapper").each(function(){
+        console.log(parseInt($(this).attr("data-starttime")), currtime,  parseInt($(this).attr("data-endtime")))
+        if(parseInt($(this).attr("data-starttime")) < currtime && parseInt($(this).attr("data-endtime")) > currtime){
+            console.log("in bounds");
+            $(this).show();
+        }else{
+            console.log("out of bounds");
+            $(this).hide();
         }
-    }); 
+
+    });
 };
 
 var highlight_bar = function(startTime, length, id){
@@ -92,6 +96,7 @@ var highlight_bar = function(startTime, length, id){
 console.log('time in seconds ' + timeinseconds);
 var buttonid = 1;
 var highlight = function(startTime, length){
+    var pixelLength = $('.ytp-progress-list').width();
 	var skipPercent = length/timeinseconds;
 
 	var startPercent = startTime/timeinseconds;
@@ -123,9 +128,8 @@ var highlight = function(startTime, length){
 	buttonid++;
 };
 
-
 video.addEventListener("seeking", function() { 
-    console.log([currtime,video.currentTime]);
+    console.log("seeking", [currtime,video.currentTime]);
     if(isScrub){
       if(currtime < video.currentTime){
          // gun.get(key).set({start:currtime, end:video.currentTime});
@@ -136,3 +140,35 @@ video.addEventListener("seeking", function() {
 }, true);
 
 
+window.addEventListener("resize", function(){
+
+    console.log("resizing")
+    $(".testclass").each(function(){
+        var startTime = parseInt($(this).attr("data-startTime"))
+        var length = parseInt($(this).attr("data-length"))
+        var pixelLength = $('.ytp-progress-list').width();
+        console.log("width of video is ", pixelLength)
+
+        var skipPercent = length/timeinseconds;
+        var startPercent = startTime/timeinseconds;
+        var left = startPercent*pixelLength;
+        var width = skipPercent*pixelLength;
+        $(this).attr("style", "left:" + left + "px; width: "+width+"px; background-color: blue;")
+    });
+});
+
+var skipAd = function(time, id){
+    console.log('trying to add a skipad button at ' + time)
+    var data = $('<div id = "button' + id+'" data-starttime = "'+time[0]+'" data-endtime = "'+time[1]+'" class="buttonwrapper videoAdUiSkipContainer html5-stop-propagation" style="opacity: 1;"><button id = "'+id+'" class="videoAdUiSkipButton videoAdUiAction videoAdUiFixedPaddingSkipButton"><div class="videoAdUiSkipButtonExperimentalText videoAdUiFixedPaddingSkipButtonText">Skip Ad</div><div class="videoAdUiExperimentalSkipIcon videoAdUiFixedPaddingSkipButtonIcon"></div></button></div>').hide()
+    //var data = $('<div id = "button' + id+'" data-starttime = "'+time[0]+'" data-endtime = "'+time[1]+'" class="videoAdUiSkipContainer html5-stop-propagation" style="opacity: 0.7;"><button class="videoAdUiSkipButton videoAdUiAction videoAdUiFixedPaddingSkipButton"><div class="videoAdUiSkipButtonExperimentalText videoAdUiFixedPaddingSkipButtonText">Skip Ad</div><div class="videoAdUiExperimentalSkipIcon videoAdUiFixedPaddingSkipButtonIcon"></div></button></div>')
+    jQuery(".video-ads").not(".videowall-endscreen").prepend(data)
+    $(document).ready(function() {
+        $(".videoAdUiSkipButton").click(function(){
+            console.log("you clicked the skip button")
+            console.log("attempting to skip to " + parseInt($("#button" + $(this).attr("id")).attr("data-endtime")));
+            video.currentTime = parseInt($("#button" + $(this).attr("id")+'.buttonwrapper').attr("data-endtime"));
+            isScrub = false;
+            $("#button" + $(this).attr("id")+'.buttonwrapper').hide()  
+        });
+    });
+}
