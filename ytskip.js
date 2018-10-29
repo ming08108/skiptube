@@ -167,7 +167,6 @@ var skipAd = function(time, id){
             console.log("you clicked the skip button")
             console.log("attempting to skip to " + parseInt($("#button" + $(this).attr("id")).attr("data-endtime")));
             video.currentTime = parseInt($("#button" + $(this).attr("id")+'.buttonwrapper').attr("data-endtime"));
-            isScrub = false;
             $("#button" + $(this).attr("id")+'.buttonwrapper').hide()  
         });
     });
